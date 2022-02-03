@@ -5,11 +5,12 @@ canvas.height = 615;
 let score = 0;
 let gameFrame = 0;
 ctx.font = '50px Georgia';
+let gameOver = false;
+
 
 // Mouse interactivity
-function myFunction() {
-    document.getElementById("demo").style.color = "red";
-}
+
+
 let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
     x: canvas.width/2,
@@ -24,6 +25,7 @@ canvas.addEventListener('mousemove', function(e){
 window.addEventListener('mouseup', function(e){
     mouse.click = false;
 });
+
 
 // Player
 const playerLeft = new Image();
@@ -62,7 +64,7 @@ class Player {
     }
     draw(){
         if (mouse.click){
-            ctx.lineWidth = 0.2;
+            ctx.lineWidth = 0.01;
             ctx.beginPath();
             ctx.moveTo(this.x, this.y);
             ctx.lineTo(mouse.x, mouse.y);
@@ -86,28 +88,28 @@ class Player {
 }
 const player = new Player();
 
-// Bubbles* Enemy
+// Enemy
 const bubblesArray = [];
 const bubble = new Image();
-bubble.src = 'https://i.ibb.co/ZX3thkw/pop2.png';
+bubble.src = 'images/clown-fish.png';
 class Bubble {
     constructor(){
         this.x = 0 - 50 - Math.random() * canvas.width/2;
         this.y = Math.random() * canvas.height;
         
         this.radius = 50;
-        this.speed = Math.random() * -5 + -1;
+        this.speed = Math.random() * 5 + 1;
         this.distance;
         this.sound = Math.random() <= 0.5 ? 'sound1' : 'sound2';
         this.counted = false;
         this.frameX = 0;
-        this.spriteWidth = 91;
-        this.spriteHeight = 91;
+        this.spriteWidth = 100;
+        this.spriteHeight = 100;
         this.pop = false;
         this.counted = false;
     }
     update(){
-        this.x -= this.speed
+        this.x += this.speed
         const dy = this.y - player.y;
         const dx = this.x - player.x;
         this.distance = Math.sqrt(dx * dx + dy * dy);
@@ -118,10 +120,12 @@ class Bubble {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.stroke();*/
+        ctx.stroke();
+        */
         ctx.drawImage(bubble, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x - 68, this.y - 68, this.spriteWidth*1.5, this.spriteHeight*1.5);
     }
 }
+
 function handleBubbles(){
     for (let i = 0; i < bubblesArray.length; i++){
         if (bubblesArray[i].y > canvas.height * 2){
@@ -137,7 +141,7 @@ function handleBubbles(){
         bubblesArray[i].update();
         bubblesArray[i].draw();
     }
-    if (gameFrame % 50 == 0) {
+    if (gameFrame % 100 == 0) {
         bubblesArray.push(new Bubble());
 
     }
@@ -160,10 +164,10 @@ let adjustX = -3;
 let adjustY = -3;
 ctx.fillStyle = 'white';
 ctx.font = '17px Verdana';
-ctx.fillText('FISH', 60, 40);
+ctx.fillText('Deep Sea', 45, 40);
 //ctx.font = '19px Verdana';
 //ctx.fillText('TEXT', 36, 49);
-const textCoordinates = ctx.getImageData(0, 0, 100, 100);
+const textCoordinates = ctx.getImageData(0, 0, 140, 100);
 
 class Particle2 {
     constructor(x, y){
@@ -176,7 +180,7 @@ class Particle2 {
         this.distance;
     }
     draw() {
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
         ctx.strokeStyle = 'rgba(34,147,214,1)';
         ctx.fillStyle = 'rgba(255,255,255,1)';
         ctx.beginPath();
@@ -252,6 +256,75 @@ init2();
 console.log(bubbleTextArray);
 /** bubble text end **/
 
+// New Enemies
+const enemyImage = new Image();
+enemyImage.src = 'images/striped-bass.png';
+
+class Enemy{
+    constructor(){
+        this.x = 0 - 50 - Math.random() * canvas.width/2;
+        this.y = Math.random() * canvas.height;
+        
+        this.radius = 50;
+        this.speed = Math.random() * 5 + 1;
+        this.distance;
+        this.sound = Math.random() <= 0.5 ? 'sound1' : 'sound2';
+        this.counted = false;
+        this.frameX = 0;
+        this.spriteWidth = 100;
+        this.spriteHeight = 100;
+        this.pop = false;
+        this.counted = false;
+    }
+    draw(){
+        /*
+          ctx.fillStyle = 'blue';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          */
+          ctx.drawImage(enemyImage, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x - 68, this.y - 68, this.spriteWidth*1.5, this.spriteHeight*1.5);
+      }
+    update(){
+        this.x -= this.speed;
+        if(this.x < 0 - this.radius * 2){
+            this.x = canvas.width + 200;
+            this.y = Math.random() * (canvas.height -150) + 90;
+            this.speed = Math.random() * 2 +2;
+        }
+        if (gameFrame % 5 == 0){
+            this.frame++;
+            if(this.frame >= 12) this.frame = 0;
+            if(this.frame == 3 || this.frame == 7 || this.frame || 11){
+                this.frameX = 0;
+            } else{
+                this.frameX++;
+            }
+            if(this.frame<3) this.frameY = 0;
+            else if (this.frame < 7) this.frameY = 1;
+            else if (this.frame < 11) this.frameY = 2;
+            else this.frameY = 0;
+        }
+        // collision with player
+        const dx = this.x - player.x;
+        const dy = this.y - player.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if(distance < this.radius + player.radius) {
+            handleGameOver();
+        }
+    }
+}
+const enemy1 = new Enemy();
+function handleEnemies(){
+    enemy1.update();
+    enemy1.draw();
+}
+function handleGameOver(){
+    ctx.fillStyle = 'white';
+    ctx.fillText('Game Over, you reached score ' + score, 130, 250);
+    gameOver = ture;
+}
 // animation loop
 function animate(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -260,6 +333,7 @@ function animate(){
         bubbleTextArray[i].update();
     }
     handleBubbles();
+    handleEnemies();
     player.update();
     player.draw();
     ctx.fillStyle = 'rgba(34,147,214,1)';
@@ -269,7 +343,7 @@ function animate(){
     ctx.fillStyle = 'rgba(34,147,214,1)';
     ctx.fillText('score: ' + score, 0, 20);
     gameFrame += 1;
-    requestAnimationFrame(animate);
+    if (!gameOver)requestAnimationFrame(animate);
 }
 animate();
 

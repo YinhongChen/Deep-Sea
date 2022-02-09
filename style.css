@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0; 
+    box-sizing: border-box;
+}
+body {
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, lightcyan, dodgerblue);
+}
+h1.sea {
+  text-align: center;
+}
+h2.headertekst {
+  text-align: left;
+}
+.container {
+    width: 80%;
+    height: 80%;
+    
+}
+form {
+  text-align: center;
+  color: red;
+  
+  opacity: 0.9;
+}
+.back {
+  text-align: bottom;
+  color: red;
+  opacity: 0.9;
+  position: relative;
+}
+div.gallery {
+  text-align: left;
+  margin: 1%;
+  border: 1px solid #ccc;
+  float: left;
+  width: 15%;
+  height: 80%;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15%;
+  text-align: center;
+}
+.btn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.but {
+  background-color: #e0c653; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.tton {
+  background-color: #3b3591; /* Green */
+  border: none;
+  position: fixed;
+  left: center;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
